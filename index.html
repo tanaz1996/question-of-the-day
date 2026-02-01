@@ -22,6 +22,7 @@
             margin-top: 80px;
             font-size: 30px;
             color: white;
+            transition: opacity 0.6s;
         }
 
         button {
@@ -29,7 +30,7 @@
             border-radius: 50px;
             cursor: pointer;
             position: absolute;
-            transition: transform 0.3s, opacity 0.5s;
+            transition: transform 0.3s, opacity 0.6s;
         }
 
         #yesBtn {
@@ -112,7 +113,7 @@
 
 <body>
 
-<h1>Uzma, will you be my Valentine? ❤️</h1>
+<h1 id="questionText">Uzma, will you be my Valentine? ❤️</h1>
 
 <button id="yesBtn">YES 💖</button>
 <button id="noBtn">No 🙈</button>
@@ -123,9 +124,8 @@
 
 <div id="flash" class="flash"></div>
 
-
-<!-- 🔴 REPLACE THIS LINK WITH YOUR GITHUB RAW IMAGE LINK -->
-<img id="loveImage" src="https://github.com/tanaz1996/question-of-the-day/blob/main/IMG_5694.png" />
+<!-- 🔴 REPLACE THIS WITH YOUR RAW IMAGE LINK -->
+<img id="loveImage" src="YOUR_RAW_IMAGE_LINK_HERE" />
 
 <script>
     const noBtn = document.getElementById("noBtn");
@@ -176,79 +176,13 @@
             flash.style.opacity = "0";
         }, 300);
 
-        // Fade buttons
+        // Fade buttons and question
         yesBtn.style.opacity = "0";
         noBtn.style.opacity = "0";
+        document.getElementById("questionText").style.opacity = "0";
 
         // Show final image
         const img = document.getElementById("loveImage");
         img.style.display = "block";
 
-        // Show celebration text
-        celebration.style.display = "block";
-
-        startFireworks();
-        spawnHearts();
-    });
-
-    // Fireworks
-    const canvas = document.getElementById("fireworks");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particles = [];
-
-    function createFirework() {
-        for (let i = 0; i < 150; i++) {
-            particles.push({
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2,
-                radius: Math.random() * 4 + 2,
-                color: `hsl(${Math.random() * 360},100%,50%)`,
-                speedX: (Math.random() - 0.5) * 10,
-                speedY: (Math.random() - 0.5) * 10,
-                alpha: 1
-            });
-        }
-    }
-
-    function animateFireworks() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, index) => {
-            p.x += p.speedX;
-            p.y += p.speedY;
-            p.alpha -= 0.01;
-
-            ctx.globalAlpha = p.alpha;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.fill();
-
-            if (p.alpha <= 0) {
-                particles.splice(index, 1);
-            }
-        });
-        requestAnimationFrame(animateFireworks);
-    }
-
-    function startFireworks() {
-        createFirework();
-        animateFireworks();
-    }
-
-    function spawnHearts() {
-        setInterval(() => {
-            const heart = document.createElement("div");
-            heart.className = "floating-heart";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.innerHTML = "❤️";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-        }, 400);
-    }
-</script>
-
-</body>
-</html>
+        // Show celebration
