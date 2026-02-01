@@ -10,12 +10,12 @@
 
     <style>
         body {
-            text-align: center;
+            margin: 0;
+            overflow: hidden;
             font-family: Arial, sans-serif;
+            text-align: center;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4);
             height: 100vh;
-            overflow: hidden;
-            margin: 0;
         }
 
         h1 {
@@ -29,6 +29,7 @@
             border-radius: 50px;
             cursor: pointer;
             position: absolute;
+            transition: transform 0.3s, opacity 0.5s;
         }
 
         #yesBtn {
@@ -36,7 +37,6 @@
             font-size: 24px;
             background-color: #ff1744;
             color: white;
-            transition: transform 0.3s;
         }
 
         #noBtn {
@@ -48,15 +48,13 @@
 
         #celebration {
             display: none;
-            font-size: 55px;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
             color: white;
-            margin-top: 30px;
-            animation: pop 0.7s ease-out forwards;
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0); }
-            100% { transform: scale(1.3); }
+            z-index: 20;
         }
 
         canvas {
@@ -71,6 +69,7 @@
             font-size: 24px;
             animation: floatUp 5s linear infinite;
             opacity: 0.8;
+            z-index: 15;
         }
 
         @keyframes floatUp {
@@ -78,8 +77,35 @@
             to { transform: translateY(-10vh); }
         }
 
-        iframe {
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4da6;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            transition: opacity 0.3s;
+        }
+
+        #loveImage {
             display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 80%;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255,255,255,0.9);
+            animation: zoomIn 1.2s ease forwards;
+            z-index: 10;
+        }
+
+        @keyframes zoomIn {
+            from { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -91,17 +117,19 @@
 <button id="yesBtn">YES 💖</button>
 <button id="noBtn">No 🙈</button>
 
-<div id="celebration">Yayyyy!!! 🎉❤️</div>
+<div id="celebration">Yayyyy!!! ❤️🎉</div>
 
 <canvas id="fireworks"></canvas>
 
-<iframe id="musicFrame" allow="autoplay"></iframe>
+<div id="flash" class="flash"></div>
+
+<!-- 🔴 REPLACE THIS LINK WITH YOUR GITHUB RAW IMAGE LINK -->
+<img id="loveImage" src="YOUR_IMAGE_URL_HERE" />
 
 <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
     const celebration = document.getElementById("celebration");
-    const musicFrame = document.getElementById("musicFrame");
 
     let yesScale = 1;
     let yesX = window.innerWidth / 2 - 100;
@@ -131,20 +159,35 @@
     function chase() {
         yesX += (noX - yesX) * 0.01;
         yesY += (noY - yesY) * 0.01;
-
         yesBtn.style.left = yesX + "px";
         yesBtn.style.top = yesY + "px";
-
         requestAnimationFrame(chase);
     }
 
     chase();
 
     yesBtn.addEventListener("click", () => {
+
+        // Pink flash
+        const flash = document.getElementById("flash");
+        flash.style.opacity = "0.8";
+        setTimeout(() => {
+            flash.style.opacity = "0";
+        }, 300);
+
+        // Fade buttons
+        yesBtn.style.opacity = "0";
+        noBtn.style.opacity = "0";
+
+        // Show final image
+        const img = document.getElementById("loveImage");
+        img.style.display = "block";
+
+        // Show celebration text
         celebration.style.display = "block";
+
         startFireworks();
         spawnHearts();
-        musicFrame.src = "https://www.youtube.com/embed/oofSnsGkops?autoplay=1";
     });
 
     // Fireworks
